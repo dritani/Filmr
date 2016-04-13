@@ -15,12 +15,13 @@ class MoodVC: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     var loadedArray:[Movie]! = []
     var pickedEmoji:String!
     let u:User = User.sharedInstance as User
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     @IBOutlet weak var pickerView: UIPickerView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        activityIndicator.hidden = true
         let color = UIColor(red: 35.0/255.0, green: 39.0/255.0, blue: 42.0/255.0, alpha: 1.0)
         self.navigationController?.navigationBar.barTintColor = color
         
@@ -46,40 +47,38 @@ class MoodVC: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
 
     @IBAction func moodSelected(sender: AnyObject) {
         
+        activityIndicator.hidden = false
+        activityIndicator.startAnimating()
+        
         pickedEmoji = emojis[pickerView.selectedRowInComponent(0)]
-        
-        
         
         tinderArray = u.moodsToTinder(&u.Moods,emoji: pickedEmoji)
         
-        //print("\(self.pickedEmoji)\((self.tinderArray?[0].title!)!)", "1st")
-        
-        // case 0
-        // case 1
-        // case 2
-        // case 3+
-//        if tinderArray.count > 0 {
-//            downloadPoster(0)
-//            if tinderArray.count > 1 {
-//                downloadPoster(1)
-//                if tinderArray.count > 2 {
-//                    downloadPoster(2)
-//                }
-//            }
-//        } else {
-//            
-//        }
-        downloadPoster(0)
-        downloadPoster(1)
-        downloadPoster(2)
-
-        
-        
-        
-
+        if tinderArray.count > 0 {
+            if tinderArray.count > 1 {
+                if tinderArray.count > 2 {
+                    downloadPoster(0,next: false)
+                    downloadPoster(1,next: false)
+                    downloadPoster(2, next: true)
+                } else {
+                    downloadPoster(0,next: false)
+                    downloadPoster(1, next: true)
+                }
+            } else {
+                downloadPoster(0, next: true)
+            }
+        }
     }
 
-    func downloadPoster(i:Int) {
+    @IBAction func resetPressed(sender: AnyObject) {
+        var toDelete:[Movie] = u.Moods[emojis[pickerView.selectedRowInComponent(0)]]!
+        for i in 0...toDelete.count - 1 {
+            toDelete.removeAtIndex(i)
+        }
+    }
+    
+    
+    func downloadPoster(i:Int,next:Bool) {
         TMDBClient.sharedInstance().getMovieInfo((tinderArray[i]), completion: {(complete) in
             //self.tinderArray[i].synopsis = synopsis
             //self.tinderArray[i].posterURL = posterURL
@@ -95,7 +94,7 @@ class MoodVC: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
                 let result = UIImageJPEGRepresentation(image!, 1.0)!
                 result.writeToFile(totalPath as String, atomically: true)
                 
-                if i==2 {
+                if next {
                     dispatch_async(dispatch_get_main_queue(), {
                         self.performSegueWithIdentifier("toTinder", sender: self.tinderArray)
                     })
@@ -116,6 +115,9 @@ class MoodVC: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
         detailVC.tinderArray = data
         detailVC.loadedArray = loadedArray
         detailVC.pickedEmoji = pickedEmoji
+        u.pickedEmoji = pickedEmoji
+        activityIndicator.stopAnimating()
+        activityIndicator.hidden = true
     }
 }
 

@@ -19,17 +19,18 @@ class TinderVC: UIViewController {
     var pickedEmoji:String!
     let u:User = User.sharedInstance as User
     var undoButton:UIBarButtonItem!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     @IBOutlet weak var noMoreLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        activityIndicator.hidden = true
+        
         let color = UIColor(red: 35.0/255.0, green: 39.0/255.0, blue: 42.0/255.0, alpha: 1.0)
         UITabBar.appearance().barTintColor = color
         self.navigationController?.navigationBar.barTintColor = color
-
-        
         
         let u = User.sharedInstance as User
         // Rounded corners
@@ -113,12 +114,6 @@ class TinderVC: UIViewController {
 extension TinderVC: KolodaViewDelegate {
     
     func koloda(koloda: KolodaView, didSwipedCardAtIndex index: UInt, inDirection direction: SwipeResultDirection) {
-        //Example: loading more cards
-//        if index >= 3 {
-//            numberOfCards = 6
-//            kolodaView.reloadData()
-//        }
-        
         
         if direction == .Left {
              loadedArray[Int(index)].swiped = 1
@@ -127,14 +122,10 @@ extension TinderVC: KolodaViewDelegate {
         }
         
         loadedArray[Int(index)].date = NSDate()
-        
+    
         if Int(index)+3 <= tinderArray.count - 1 {//tinderArray.count {
             downloadPoster(Int(index)+3)
-            
         }
-
-        
-        
     }
     
     func koloda(kolodaDidRunOutOfCards koloda: KolodaView) {
@@ -144,6 +135,8 @@ extension TinderVC: KolodaViewDelegate {
     }
     
     func koloda(koloda: KolodaView, didSelectCardAtIndex index: UInt) {
+        activityIndicator.hidden = false
+        activityIndicator.startAnimating()
         downloadBackdrop(Int(index))
         
     }
@@ -151,8 +144,9 @@ extension TinderVC: KolodaViewDelegate {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let detailVC = segue.destinationViewController as! DetailVC
         let data = sender as! Movie
-
         detailVC.movie = data
+        activityIndicator.stopAnimating()
+        activityIndicator.hidden = true
     }
 }
 
@@ -162,17 +156,12 @@ extension TinderVC: KolodaViewDataSource {
     
     func koloda(kolodaNumberOfCards koloda:KolodaView) -> UInt {
         return UInt(loadedArray.count)
-        
-        //return numberOfCards
     }
     
     func koloda(koloda: KolodaView, viewForCardAtIndex index: UInt) -> UIView {
         let data = NSData(contentsOfFile: (tinderArray?[Int(index)].posterPath)!)
         let image = UIImage(data: data!)
         return UIImageView(image: image)
-        
-        //return UIImageView(image: UIImage(named: "Card_like_\(index + 1)"))
-        
     }
     
     func koloda(koloda: KolodaView, viewForCardOverlayAtIndex index: UInt) -> OverlayView? {

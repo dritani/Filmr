@@ -14,7 +14,7 @@ class FavoriteCell: UITableViewCell {
 
 
     @IBOutlet weak var posterImage: UIImageView!
-    @IBOutlet weak var tempLabel: UILabel!
     @IBOutlet weak var moodLabel: UILabel!
+    @IBOutlet weak var title: UITextView!
 
 }

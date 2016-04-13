@@ -19,7 +19,7 @@ class DetailVC: UIViewController {
     
     @IBOutlet weak var vote: UILabel!
     
-    @IBOutlet weak var synopsis: UILabel!
+    @IBOutlet weak var synopsis: UITextView!
     
     override func viewDidLoad() {
         super.viewDidLoad()

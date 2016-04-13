@@ -14,6 +14,7 @@ class User {
     
     var Moods:[String:[Movie]]! = ["👀":[Movie(title: "init",emoji: "👀")]]
 
+    var pickedEmoji:String!
 
     func moodsToTinder(inout Moods:[String:[Movie]]!, emoji:String) -> [Movie]{
         var movieArray:[Movie] = []

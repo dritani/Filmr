@@ -11,7 +11,7 @@ import UIKit
 class FavoritesVC: UITableViewController {
 
     let u:User = User.sharedInstance as User
-    var swipedArray:[Movie]!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,12 +20,11 @@ class FavoritesVC: UITableViewController {
         UITabBar.appearance().barTintColor = color
         self.navigationController?.navigationBar.barTintColor = color
         
-        swipedArray = u.moodsToSwiped(&u.Moods)
     }
 
         
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-       return swipedArray.count
+       return u.moodsToSwiped(&u.Moods).count
 //        print(u.moodsToSwiped(&u.Moods).count)
        //return 5
 
@@ -39,14 +38,15 @@ class FavoritesVC: UITableViewController {
         tableView.contentInset = inset
         tableView.scrollIndicatorInsets = inset
         
+        var swipedArray:[Movie] = u.moodsToSwiped(&u.Moods)
         
-        cell.tempLabel.text = swipedArray[indexPath.row].title
+        cell.title.text = swipedArray[indexPath.row].title
         
         let data = NSData(contentsOfFile: (swipedArray[indexPath.row].posterPath)!)
         let image = UIImage(data: data!)
         cell.posterImage.image = image
         
-        print(swipedArray[indexPath.row].emoji)
+        
         cell.moodLabel.text = swipedArray[indexPath.row].emoji
         
         //cell.tempLabel.text = "GGG"
@@ -54,22 +54,39 @@ class FavoritesVC: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
-
-        performSegueWithIdentifier("toDetail2", sender: self)
+        downloadBackdrop(indexPath.row)
     }
 
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
-    }
     
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if (editingStyle == UITableViewCellEditingStyle.Delete) {
-            swipedArray[indexPath.row] = Movie(title: "a", emoji: "a")
-            swipedArray.removeAtIndex(indexPath.row)
+    func downloadBackdrop(i:Int) {
+        
+        var swipedArray:[Movie] = u.moodsToSwiped(&u.Moods)
+        
+        TMDBClient.sharedInstance().getMovieBackdrop((swipedArray[i].backdropURL)!, completion: {(data) in
+            
+            let path = "\(self.u.pickedEmoji)B\((swipedArray[i].title!))"
+            let documentsDirectoryURL: NSURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
+            let totalPath:String = documentsDirectoryURL.URLByAppendingPathComponent(path as String).path!
+            swipedArray[i].backdropPath = totalPath
+            
+            let image = UIImage(data: data)
+            let result = UIImageJPEGRepresentation(image!, 0.0)!
+            result.writeToFile(totalPath as String, atomically: true)
             
             
-        }
+            dispatch_async(dispatch_get_main_queue(), {
+                self.performSegueWithIdentifier("toDetail2", sender: swipedArray[i])
+            })
+            
+            
+        })
+    }
+ 
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        let detailVC = segue.destinationViewController as! DetailVC
+        let data = sender as! Movie
+        
+        detailVC.movie = data
     }
     
 }
