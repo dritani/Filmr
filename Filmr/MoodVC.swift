@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class MoodVC: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
 
@@ -18,6 +19,10 @@ class MoodVC: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     @IBOutlet weak var pickerView: UIPickerView!
+    lazy var sharedContext: NSManagedObjectContext = {
+        return CoreDataStackManager.sharedInstance().managedObjectContext
+    }()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +32,7 @@ class MoodVC: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
         
         // ["😀","😱","😍","💩"]
         emojis = Array(MoodList.Moods.keys)
+        
         
         
 
@@ -57,8 +63,8 @@ class MoodVC: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
         if tinderArray.count > 0 {
             if tinderArray.count > 1 {
                 if tinderArray.count > 2 {
-                    downloadPoster(0,next: false)
-                    downloadPoster(1,next: false)
+                    downloadPoster(0, next: false)
+                    downloadPoster(1, next: false)
                     downloadPoster(2, next: true)
                 } else {
                     downloadPoster(0,next: false)
@@ -71,19 +77,18 @@ class MoodVC: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     }
 
     @IBAction func resetPressed(sender: AnyObject) {
-        var toDelete:[Movie] = u.Moods[emojis[pickerView.selectedRowInComponent(0)]]!
-        for i in 0...toDelete.count - 1 {
-            toDelete.removeAtIndex(i)
+        for (mood,movies) in u.Moods {
+            for movie in movies {
+                print(movie.title)
+            }
         }
     }
     
     
     func downloadPoster(i:Int,next:Bool) {
         TMDBClient.sharedInstance().getMovieInfo((tinderArray[i]), completion: {(complete) in
-            //self.tinderArray[i].synopsis = synopsis
-            //self.tinderArray[i].posterURL = posterURL
-            TMDBClient.sharedInstance().getMoviePoster((self.tinderArray[i].posterURL)!, completion: {(data) in
-                
+            TMDBClient.sharedInstance().getMoviePoster((self.tinderArray[i].posterURL)! as String, completion: {(data) in
+                print("i")
                 let path = "\(self.pickedEmoji)\((self.tinderArray[i].title!))"
                 
                 let documentsDirectoryURL: NSURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
@@ -93,7 +98,7 @@ class MoodVC: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
                 let image = UIImage(data: data)
                 let result = UIImageJPEGRepresentation(image!, 1.0)!
                 result.writeToFile(totalPath as String, atomically: true)
-                
+                CoreDataStackManager.sharedInstance().saveContext()
                 if next {
                     dispatch_async(dispatch_get_main_queue(), {
                         self.performSegueWithIdentifier("toTinder", sender: self.tinderArray)
@@ -107,15 +112,14 @@ class MoodVC: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
         let tabVC = segue.destinationViewController as! UITabBarController
         let detailVC = tabVC.viewControllers![0] as! TinderVC
         let data = sender as! [Movie]
-
         loadedArray = u.tinderToLoaded(&tinderArray)
-        
         //print(loadedArray[0].posterURL)
         //print(u.Moods[pickedEmoji]![0].posterURL)
         detailVC.tinderArray = data
         detailVC.loadedArray = loadedArray
         detailVC.pickedEmoji = pickedEmoji
         u.pickedEmoji = pickedEmoji
+        CoreDataStackManager.sharedInstance().saveContext()
         activityIndicator.stopAnimating()
         activityIndicator.hidden = true
     }

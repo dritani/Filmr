@@ -25,9 +25,9 @@ class DetailVC: UIViewController {
         super.viewDidLoad()
         
         vote.text = String(movie.vote)
-        synopsis.text = movie.synopsis
+        synopsis.text = movie.synopsis as String
         
-        let data = NSData(contentsOfFile: (movie.backdropPath)!)
+        let data = NSData(contentsOfFile: (movie.backdropPath)! as String)
         let image = UIImage(data: data!)
         
         backdropImage.image = image

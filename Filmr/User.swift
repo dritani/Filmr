@@ -7,31 +7,77 @@
 //
 
 import Foundation
+import CoreData
 
 class User {
     
     static let sharedInstance = User()
     
-    var Moods:[String:[Movie]]! = ["👀":[Movie(title: "init",emoji: "👀")]]
-
+    lazy var Moods:[String:[Movie]]! = ["A":[Movie(title: "a", emoji: "A", context: self.sharedContext)]]
+    
     var pickedEmoji:String!
-
-    func moodsToTinder(inout Moods:[String:[Movie]]!, emoji:String) -> [Movie]{
-        var movieArray:[Movie] = []
+    
+    lazy var sharedContext: NSManagedObjectContext = {
+        return CoreDataStackManager.sharedInstance().managedObjectContext
+    }()
+    
+    init() {
+        var allMovies:[Movie] = []
+        let fetchRequest = NSFetchRequest(entityName: "Movie")
         
-        // Check if Mood exists. If it doesn't, create it.
-        if let _ = Moods?[emoji] {
-            movieArray = Moods[emoji]!
-        } else {
-            for movie in MoodList.Moods[emoji]! {
-                let detailedMovie = Movie(title:movie,emoji:emoji)
-                movieArray.append(detailedMovie)
-                Moods[emoji] = movieArray
-            }
+        do {
+            allMovies = try sharedContext.executeFetchRequest(fetchRequest) as! [Movie]
+        } catch _ {
+
         }
         
-        // Gets only those movies that haven't been swiped yet.
+        print(allMovies.count)
+        if allMovies.count == 0 {
+            for (mood,movies) in MoodList.Moods {
+                var movieArray:[Movie] = []
+                for movie in movies {
+                    let newMovie = Movie(title: movie, emoji: mood, context: self.sharedContext)
+                    movieArray.append(newMovie)
+                }
+                Moods[mood] = movieArray
+            }
+        } else {
+            var moods:[String] = []
+            for movie in allMovies {
+                if moods.contains(movie.emoji as String)==false {
+                    moods.append(movie.emoji as String)
+                }
+            }
+            
+            for mood in moods {
+                var movies:[Movie] = []
+                for movie in allMovies {
+                    if movie.emoji as String == mood {
+                        movies.append(movie)
+                    }
+                }
+                Moods[mood]=movies
+            }
+//            for movie in allMovies  {
+//                let index = Moods?[movie.emoji as String]!.indexOf({$0.title == movie.title})
+//                Moods?[movie.emoji as String]![index!] = movie
+//            }
+            Moods["A"] = []
+            for movie in allMovies {
+                if movie.emoji as String == "A" {
+                    sharedContext.deleteObject(movie)
+                }
+            }
+        }
+    }
+    
+    func moodsToTinder(inout Moods:[String:[Movie]]!, emoji:String) -> [Movie]{
+        
+        // Gets only those movies that haven't been swiped yet
+        var movieArray:[Movie] = []
         var tinderArray: [Movie] = []
+        
+        movieArray = Moods[emoji]!
         for movie in movieArray {
             if movie.swiped == 0 {
                 tinderArray.append(movie)
@@ -39,10 +85,6 @@ class User {
         }
         return tinderArray
     }
-    
-    
-
-    
     
     func tinderToLoaded(inout tinderArray:[Movie])->[Movie] {
         var loadedArray:[Movie] = []
@@ -52,10 +94,8 @@ class User {
         return loadedArray
     }
     
-    
     func moodsToSwiped(inout Moods:[String:[Movie]]!)->[Movie] {
         var swipedArray:[Movie] = []
-        
         
         // Gets all the movies that have been liked across all moods...
         for (mood,movies) in Moods {
@@ -67,9 +107,6 @@ class User {
         }
         
         // ...and sorts them by date.
-        
-        
-        //swipedArray.sort
         let sortedArray = swipedArray.sort({ $0.date.compare($1.date) == .OrderedAscending })
 
         

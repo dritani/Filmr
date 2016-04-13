@@ -7,32 +7,36 @@
 //
 
 import Foundation
-
-class Movie {
+import CoreData
+class Movie: NSManagedObject {
     
     // when initializing
-    var title:String!
-    var emoji:String!
+    @NSManaged var title:NSString!
+    @NSManaged var emoji:NSString!
     
     // when downloading
-    var posterURL:String!
-    var posterPath:String!
-    var backdropURL:String!
-    var backdropPath:String!
-    var synopsis:String!
-    var vote:Double!
+    @NSManaged var posterURL:NSString!
+    @NSManaged var posterPath:NSString!
+    @NSManaged var backdropURL:NSString!
+    @NSManaged var backdropPath:NSString!
+    @NSManaged var synopsis:NSString!
+    @NSManaged var vote:NSNumber!
     
     // when swiping
-    var swiped:Int!
-    var date:NSDate!
+    @NSManaged var swiped:NSNumber!
+    @NSManaged var date:NSDate!
     
     
+    override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
+        super.init(entity: entity, insertIntoManagedObjectContext: context)
+    }
     
-    init(title:String, emoji:String) {
+    init(title:String, emoji:String, context: NSManagedObjectContext) {
+        let entity = NSEntityDescription.entityForName("Movie", inManagedObjectContext: context)
+        super.init(entity: entity!, insertIntoManagedObjectContext: context)
+        
         self.title = title
         self.emoji = emoji
         self.swiped = 0
     }
-    
-    
 }
