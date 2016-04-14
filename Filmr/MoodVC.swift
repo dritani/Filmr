@@ -128,7 +128,7 @@ class MoodVC: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
                 let documentsDirectoryURL: NSURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
                 let totalPath:String = documentsDirectoryURL.URLByAppendingPathComponent(path as String).path!
                 self.tinderArray[i].posterPath = totalPath
-                
+                print(self.tinderArray[i].posterPath)
                 let image = UIImage(data: data)
                 let result = UIImageJPEGRepresentation(image!, 1.0)!
                 result.writeToFile(totalPath as String, atomically: true)

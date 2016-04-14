@@ -163,9 +163,37 @@ extension TinderVC: KolodaViewDataSource {
     }
     
     func koloda(koloda: KolodaView, viewForCardAtIndex index: UInt) -> UIView {
-        let data = NSData(contentsOfFile: (tinderArray?[Int(index)].posterPath)! as String)
-        let image = UIImage(data: data!)
-        return UIImageView(image: image)
+        var image2:UIImage!
+        print(tinderArray?[Int(index)].title)
+        
+
+        
+        if NSFileManager.defaultManager().fileExistsAtPath(loadedArray?[Int(index)].posterPath as! String) {
+            let data = NSData(contentsOfFile: (loadedArray?[Int(index)].posterPath)! as String)
+            let image = UIImage(data: data!)
+            return UIImageView(image: image)
+        } else {
+            TMDBClient.sharedInstance().getMoviePoster((loadedArray?[Int(index)].posterURL)! as String, completion: {(data) in
+                let path = "\(self.loadedArray?[Int(index)].emoji)\((self.loadedArray?[Int(index)].title!))"
+                let documentsDirectoryURL: NSURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
+                let totalPath:String = documentsDirectoryURL.URLByAppendingPathComponent(path as String).path!
+                
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.loadedArray?[Int(index)].posterPath = totalPath
+                })
+                let image = UIImage(data: data)
+                let result = UIImageJPEGRepresentation(image!, 0.0)!
+                result.writeToFile(totalPath as String, atomically: true)
+                dispatch_async(dispatch_get_main_queue(), {
+                    image2 = image
+                })
+
+                
+            })
+            
+        }
+
+        return UIImageView(image: image2)
     }
     
     func koloda(koloda: KolodaView, viewForCardOverlayAtIndex index: UInt) -> OverlayView? {

@@ -70,7 +70,7 @@ class TMDBClient {
                 return
             }
             
-            
+            print(movie.title)
             guard let synopsis = results[0][TMDBConstants.TMDBResponseKeys.Synopsis] as? String else {
                 print("Cannot find the Synopsis")
                 return
