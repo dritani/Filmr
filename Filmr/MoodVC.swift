@@ -79,7 +79,9 @@ class MoodVC: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     @IBAction func resetPressed(sender: AnyObject) {
         for (mood,movies) in u.Moods {
             for movie in movies {
-                print(movie.title)
+                sharedContext.deleteObject(movie)
+                let index = u.Moods?[movie.emoji as String]!.indexOf({$0.title == movie.title})
+                u.Moods?[mood]![index!] = Movie(title: movie.title as String, emoji: movie.emoji as String, context: sharedContext)
             }
         }
     }
@@ -88,7 +90,6 @@ class MoodVC: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     func downloadPoster(i:Int,next:Bool) {
         TMDBClient.sharedInstance().getMovieInfo((tinderArray[i]), completion: {(complete) in
             TMDBClient.sharedInstance().getMoviePoster((self.tinderArray[i].posterURL)! as String, completion: {(data) in
-                print("i")
                 let path = "\(self.pickedEmoji)\((self.tinderArray[i].title!))"
                 
                 let documentsDirectoryURL: NSURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!

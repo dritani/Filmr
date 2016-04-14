@@ -23,11 +23,7 @@ class FavoritesVC: UITableViewController {
         UITabBar.appearance().barTintColor = color
         self.navigationController?.navigationBar.barTintColor = color
         
-        var swipedArray:[Movie] = u.moodsToSwiped(&u.Moods)
-        for i in 0...swipedArray.count - 1 {
-            downloadPoster(i)
-        }
-        
+        tableView.reloadData()
     }
 
         
@@ -48,15 +44,34 @@ class FavoritesVC: UITableViewController {
         
         var swipedArray:[Movie] = u.moodsToSwiped(&u.Moods)
         
-        cell.title.text = swipedArray[indexPath.row].title as String
+        let movie = swipedArray[indexPath.row]
         
-        let data = NSData(contentsOfFile: (swipedArray[indexPath.row].posterPath)! as String)
-        let image = UIImage(data: data!)
-        cell.posterImage.image = image
-        
-        
-        cell.moodLabel.text = swipedArray[indexPath.row].emoji as String
-        
+        if NSFileManager.defaultManager().fileExistsAtPath(movie.posterPath as String) {
+            let data = NSData(contentsOfFile: (movie.posterPath)! as String)
+            let image = UIImage(data: data!)
+            cell.posterImage.image = image
+            cell.title.text = swipedArray[indexPath.row].title as String
+            cell.moodLabel.text = swipedArray[indexPath.row].emoji as String
+        } else {
+            TMDBClient.sharedInstance().getMoviePoster((movie.posterURL)! as String, completion: {(data) in
+                let path = "\(movie.emoji)\((movie.title!))"
+                let documentsDirectoryURL: NSURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
+                let totalPath:String = documentsDirectoryURL.URLByAppendingPathComponent(path as String).path!
+                
+                dispatch_async(dispatch_get_main_queue(), {
+                    swipedArray[indexPath.row].posterPath = totalPath
+                })
+                let image = UIImage(data: data)
+                let result = UIImageJPEGRepresentation(image!, 0.0)!
+                result.writeToFile(totalPath as String, atomically: true)
+                
+                dispatch_async(dispatch_get_main_queue(), {
+                    cell.posterImage.image = image
+                    cell.title.text = swipedArray[indexPath.row].title as String
+                    cell.moodLabel.text = swipedArray[indexPath.row].emoji as String
+                })
+            })
+        }
         return cell
     }
     
@@ -64,6 +79,12 @@ class FavoritesVC: UITableViewController {
         downloadBackdrop(indexPath.row)
     }
 
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        let detailVC = segue.destinationViewController as! DetailVC
+        let data = sender as! Movie
+        detailVC.movie = data
+        CoreDataStackManager.sharedInstance().saveContext()
+    }
     
     func downloadBackdrop(i:Int) {
         
@@ -87,31 +108,5 @@ class FavoritesVC: UITableViewController {
             
             
         })
-    }
- 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        let detailVC = segue.destinationViewController as! DetailVC
-        let data = sender as! Movie
-        detailVC.movie = data
-        CoreDataStackManager.sharedInstance().saveContext()
-    }
-    
-    func downloadPoster(i:Int) {
-        var swipedArray:[Movie] = u.moodsToSwiped(&u.Moods)
-            TMDBClient.sharedInstance().getMoviePoster((swipedArray[i].posterURL)! as String, completion: {(data) in
-                let path = "\(swipedArray[i].emoji)\((swipedArray[i].title!))"
-                
-                let documentsDirectoryURL: NSURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
-                let totalPath:String = documentsDirectoryURL.URLByAppendingPathComponent(path as String).path!
-                swipedArray[i].posterPath = totalPath
-                
-                let image = UIImage(data: data)
-                let result = UIImageJPEGRepresentation(image!, 1.0)!
-                result.writeToFile(totalPath as String, atomically: true)
-                CoreDataStackManager.sharedInstance().saveContext()
-                self.tableView.reloadData()
-                
-            })
-        
     }
 }
