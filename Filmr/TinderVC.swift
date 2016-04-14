@@ -40,6 +40,8 @@ class TinderVC: UIViewController {
 //        loadedArray[0].emoji = "😎"
 //        print(u.Moods[pickedEmoji]![0].emoji)
         
+        TMDBClient.sharedInstance().viewController = self
+        
         noMoreLabel.hidden = true
  
         kolodaView.dataSource = self

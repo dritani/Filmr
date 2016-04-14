@@ -23,6 +23,8 @@ class FavoritesVC: UITableViewController {
         UITabBar.appearance().barTintColor = color
         self.navigationController?.navigationBar.barTintColor = color
         
+        TMDBClient.sharedInstance().viewController = self
+        
         tableView.reloadData()
     }
 

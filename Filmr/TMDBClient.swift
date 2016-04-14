@@ -7,9 +7,11 @@
 //
 
 import Foundation
-
+import UIKit
 
 class TMDBClient {
+    
+    var viewController:UIViewController!
     
     class func sharedInstance() -> TMDBClient {
         struct Singleton {
@@ -17,7 +19,6 @@ class TMDBClient {
         }
         return Singleton.sharedInstance
     }
-    
     
     func getMovieInfo(movie: Movie, completion: (complete:Bool)->Void) {
         let methodParameters = [
@@ -34,6 +35,9 @@ class TMDBClient {
             
             /* GUARD: Was there an error? */
             guard (error == nil) else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.alert("The connection failed.", viewController: self.viewController)
+                }
                 print("There was an error with your request: \(error)")
                 return
             }
@@ -121,6 +125,9 @@ class TMDBClient {
             
             /* GUARD: Was there an error? */
             guard (error == nil) else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.alert("The connection failed.", viewController: self.viewController)
+                }
                 print("There was an error with your request: \(error)")
                 return
             }
@@ -170,6 +177,9 @@ class TMDBClient {
             
             /* GUARD: Was there an error? */
             guard (error == nil) else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.alert("The connection failed.", viewController: self.viewController)
+                }
                 print("There was an error with your request: \(error)")
                 return
             }
@@ -196,6 +206,26 @@ class TMDBClient {
         task.resume()
     }
 
+    func alert(message: String, viewController: UIViewController) {
+        
+        let alertController = UIAlertController(title: "Error", message: "\(message)", preferredStyle: .Alert)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
+            // ...
+        }
+        alertController.addAction(cancelAction)
+        
+        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+            // ...
+        }
+        alertController.addAction(OKAction)
+        
+        viewController.presentViewController(alertController, animated: true) {
+            // ...
+        }
+        
+    }
+    
     private func tmdbURLFromParameters(parameters: [String:AnyObject], withPathExtension: String? = nil) -> NSURL {
         
         let components = NSURLComponents()

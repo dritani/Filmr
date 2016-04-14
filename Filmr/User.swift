@@ -16,7 +16,6 @@ class User {
     lazy var Moods:[String:[Movie]]! = ["A":[Movie(title: "a", emoji: "A", context: self.sharedContext)]]
     
     var pickedEmoji:String!
-    
     lazy var sharedContext: NSManagedObjectContext = {
         return CoreDataStackManager.sharedInstance().managedObjectContext
     }()

@@ -18,21 +18,53 @@ class MoodVC: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     let u:User = User.sharedInstance as User
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
+    @IBOutlet weak var resetLabel: UILabel!
+    @IBOutlet weak var theSwitch: UISwitch!
     @IBOutlet weak var pickerView: UIPickerView!
+    
+    @IBOutlet weak var resetButton: UIButton!
+    @IBOutlet weak var goButton: UIButton!
+    @IBOutlet weak var iFeelLabel: UILabel!
+    @IBOutlet weak var movieLabel: UILabel!
+    
+    @IBOutlet weak var preferencesLabel: UILabel!
     lazy var sharedContext: NSManagedObjectContext = {
         return CoreDataStackManager.sharedInstance().managedObjectContext
     }()
 
+    @IBAction func theSwitchPressed(sender: AnyObject) {
+ 
+        let color:UIColor
+        let color2:UIColor
+        let color3:UIColor
+        
+        if theSwitch.on {
+            color = UIColor(red: 35.0/255.0, green: 79.0/255.0, blue: 42.0/255.0, alpha: 1.0)
+            color2 = UIColor(red: 0/255.0, green: 255.0/255.0, blue: 0.0/255.0, alpha: 1.0)
+            color3 = UIColor(red: 103.0/255.0, green: 91.0/255.0, blue: 220.0/255.0, alpha: 1.0)
+        } else {
+            color = UIColor(red: 35.0/255.0, green: 39.0/255.0, blue: 42.0/255.0, alpha: 1.0)
+            color2 = UIColor(red: 0.0/255.0, green: 122.0/255.0, blue: 255.0/255.0, alpha: 1.0)
+            color3 = UIColor(red: 255.0/255.0, green: 127.0/255.0, blue: 0.0/255.0, alpha: 1.0)
+        }
+        view.backgroundColor = color
+        self.navigationController?.navigationBar.barTintColor = color
+        iFeelLabel.backgroundColor = color
+        movieLabel.backgroundColor = color
+        pickerView.backgroundColor = color
+        preferencesLabel.backgroundColor = color
+        goButton.backgroundColor = color2
+        resetButton.backgroundColor = color3
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         activityIndicator.hidden = true
-        let color = UIColor(red: 35.0/255.0, green: 39.0/255.0, blue: 42.0/255.0, alpha: 1.0)
-        self.navigationController?.navigationBar.barTintColor = color
-        
+        theSwitch.on = false
+        preferencesLabel.hidden = true
         // ["😀","😱","😍","💩"]
         emojis = Array(MoodList.Moods.keys)
-        
+        TMDBClient.sharedInstance().viewController = self
         
         
 
@@ -84,6 +116,7 @@ class MoodVC: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
                 u.Moods?[mood]![index!] = Movie(title: movie.title as String, emoji: movie.emoji as String, context: sharedContext)
             }
         }
+        preferencesLabel.hidden = false
     }
     
     
