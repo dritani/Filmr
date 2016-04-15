@@ -20,7 +20,7 @@ class TMDBClient {
         return Singleton.sharedInstance
     }
     
-    func testConnection(movie: Movie, completion: (complete:Bool)->Void) {
+    func testConnection(movie: Movie, completion: (complete:Int)->Void) {
         let methodParameters = [
             TMDBConstants.TMDBParameterKeys.ApiKey: TMDBConstants.TMDBParameterValues.ApiKey,
             TMDBConstants.TMDBParameterKeys.Query: movie.title
@@ -35,12 +35,12 @@ class TMDBClient {
             /* GUARD: Was there an error? */
             guard (error == nil) else {
                 // move this to moodvc. if error != nil, alert
-                completion(complete: true)
+                completion(complete: -1)
 
                 return
             }
 
-            
+            completion(complete: 1)
         }
         
         task.resume()
@@ -63,7 +63,9 @@ class TMDBClient {
             /* GUARD: Was there an error? */
             guard (error == nil) else {
                 print("There was an error with your request: \(error)")
+                completion(complete: false,synopsis: "A",posterURL:"A",backdropURL:"A",vote:1.0)
 
+                
                 return
             }
             
@@ -166,6 +168,7 @@ class TMDBClient {
             // No need, the data is already raw image data.
             
             /* 6. Use the data! */
+            print("complete")
             completion(data:data)
         }
         

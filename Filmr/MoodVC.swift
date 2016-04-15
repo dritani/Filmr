@@ -16,6 +16,7 @@ class MoodVC: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     var loadedArray:[Movie]! = []
     var pickedEmoji:String!
     let u:User = User.sharedInstance as User
+    var ind:Int = 0
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     @IBOutlet weak var resetLabel: UILabel!
@@ -93,7 +94,7 @@ class MoodVC: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
         tinderArray = u.moodsToTinder(&u.Moods,emoji: pickedEmoji)
         
         TMDBClient.sharedInstance().testConnection(tinderArray[0], completion: {(complete) in
-            if complete {
+            if complete == -1{
                 dispatch_async(dispatch_get_main_queue()) {
                     self.alert("The connection failed.", viewController: self)
                     self.activityIndicator.stopAnimating()
@@ -103,20 +104,21 @@ class MoodVC: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
             //stopspinning
         })
         
-        if tinderArray.count > 0 {
-            if tinderArray.count > 1 {
-                if tinderArray.count > 2 {
-                    downloadPoster(0, next: false)
-                    downloadPoster(1, next: false)
-                    downloadPoster(2, next: true)
-                } else {
-                    downloadPoster(0,next: false)
-                    downloadPoster(1, next: true)
-                }
-            } else {
-                downloadPoster(0, next: true)
-            }
-        }
+//        if tinderArray.count > 0 {
+//            if tinderArray.count > 1 {
+//                if tinderArray.count > 2 {
+//                    downloadPoster(0, next: false)
+//                    downloadPoster(1, next: false)
+//                    downloadPoster(2, next: true)
+//                } else {
+//                    downloadPoster(0,next: false)
+//                    downloadPoster(1, next: true)
+//                }
+//            } else {
+//                downloadPoster(0, next: true)
+//            }
+//        }
+        downloadPoster(ind)
     }
 
     func alert(message: String, viewController: UIViewController) {
@@ -151,16 +153,17 @@ class MoodVC: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     }
     
     
-    func downloadPoster(i:Int,next:Bool) {
+    func downloadPoster(i:Int) {
         TMDBClient.sharedInstance().getMovieInfo((tinderArray[i]), completion: {(complete,synopsis,posterURL,backdropURL,vote) in
             
             self.tinderArray[i].synopsis = synopsis
             self.tinderArray[i].posterURL = posterURL
             self.tinderArray[i].backdropURL = backdropURL
             self.tinderArray[i].vote = vote
-            TMDBClient.sharedInstance().getMoviePoster((self.tinderArray[i].posterURL)! as String, completion: {(data) in
-                let path = "\(self.pickedEmoji)\((self.tinderArray[i].title!))"
 
+            print("calling function")
+            TMDBClient.sharedInstance().getMoviePoster(posterURL, completion: {(data) in
+                let path = "\(self.pickedEmoji)\((self.tinderArray[i].title!))"
                 let documentsDirectoryURL: NSURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
                 let totalPath:String = documentsDirectoryURL.URLByAppendingPathComponent(path as String).path!
                 self.tinderArray[i].posterPath = totalPath
@@ -169,12 +172,10 @@ class MoodVC: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
                 let result = UIImageJPEGRepresentation(image!, 1.0)!
                 result.writeToFile(totalPath as String, atomically: true)
                 CoreDataStackManager.sharedInstance().saveContext()
-                if next {
-                    dispatch_async(dispatch_get_main_queue(), {
-                        self.performSegueWithIdentifier("toTinder", sender: self.tinderArray)
-                    })
-                }
-                
+
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.performSegueWithIdentifier("toTinder", sender: self.tinderArray)
+                })
             })
         })
     }
@@ -182,11 +183,12 @@ class MoodVC: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
         let tabVC = segue.destinationViewController as! UITabBarController
         let detailVC = tabVC.viewControllers![0] as! TinderVC
         let data = sender as! [Movie]
-        loadedArray = u.tinderToLoaded(&tinderArray)
+        u.loadedArray = [self.tinderArray[0]]//u.tinderToLoaded(&tinderArray)
+        print(loadedArray)
         //print(loadedArray[0].posterURL)
         //print(u.Moods[pickedEmoji]![0].posterURL)
         detailVC.tinderArray = data
-        detailVC.loadedArray = loadedArray
+        //detailVC.loadedArray = loadedArray
         detailVC.pickedEmoji = pickedEmoji
         u.pickedEmoji = pickedEmoji
         CoreDataStackManager.sharedInstance().saveContext()

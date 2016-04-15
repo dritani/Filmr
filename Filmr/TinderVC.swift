@@ -33,6 +33,8 @@ class TinderVC: UIViewController {
         self.navigationController?.navigationBar.barTintColor = color
         
         let u = User.sharedInstance as User
+        self.loadedArray = u.loadedArray
+        print(loadedArray)
         // Rounded corners
 //        kolodaView.layer.cornerRadius = 20
 //        kolodaView.clipsToBounds = true
@@ -48,6 +50,8 @@ class TinderVC: UIViewController {
         kolodaView.delegate = self
         
         self.modalTransitionStyle = UIModalTransitionStyle.FlipHorizontal
+        
+        
     }
     
 
@@ -74,6 +78,15 @@ class TinderVC: UIViewController {
     func downloadPoster(i:Int) {
         // Download movie info
         TMDBClient.sharedInstance().getMovieInfo((tinderArray[i]), completion: {(complete,synopsis,posterURL,backdropURL,vote) in
+            if complete == false {
+                print("WTF")
+                print("WTF")
+                print("WTF")
+                print("WTF")
+                print("WTF")
+                self.alert("The connection failed.", viewController: self)
+
+            }
 //            self.tinderArray[i].synopsis = synopsis
 //            self.tinderArray[i].posterURL = posterURL
             self.tinderArray[i].synopsis = synopsis
@@ -129,8 +142,9 @@ extension TinderVC: KolodaViewDelegate {
         CoreDataStackManager.sharedInstance().saveContext()
         loadedArray[Int(index)].date = NSDate()
     
-        if Int(index)+3 <= tinderArray.count - 1 {//tinderArray.count {
-            downloadPoster(Int(index)+3)
+        
+        if Int(index)+1 <= tinderArray.count - 1 {//tinderArray.count {
+            downloadPoster(Int(index)+1)
         }
     }
     
@@ -167,7 +181,6 @@ extension TinderVC: KolodaViewDataSource {
     
     func koloda(koloda: KolodaView, viewForCardAtIndex index: UInt) -> UIView {
         var image2:UIImage!
-        
 
         
         if NSFileManager.defaultManager().fileExistsAtPath(loadedArray?[Int(index)].posterPath as! String) {
@@ -176,13 +189,13 @@ extension TinderVC: KolodaViewDataSource {
             return UIImageView(image: image)
         } else {
             TMDBClient.sharedInstance().getMoviePoster((loadedArray?[Int(index)].posterURL)! as String, completion: {(data) in
+                
                 let path = "\(self.loadedArray?[Int(index)].emoji)\((self.loadedArray?[Int(index)].title!))"
                 let documentsDirectoryURL: NSURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
                 let totalPath:String = documentsDirectoryURL.URLByAppendingPathComponent(path as String).path!
                 
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.loadedArray?[Int(index)].posterPath = totalPath
-                })
+                self.loadedArray?[Int(index)].posterPath = totalPath
+                
                 let image = UIImage(data: data)
                 let result = UIImageJPEGRepresentation(image!, 0.0)!
                 result.writeToFile(totalPath as String, atomically: true)
@@ -201,6 +214,26 @@ extension TinderVC: KolodaViewDataSource {
     func koloda(koloda: KolodaView, viewForCardOverlayAtIndex index: UInt) -> OverlayView? {
         return NSBundle.mainBundle().loadNibNamed("OverlayView",
             owner: self, options: nil)[0] as? OverlayView
+    }
+    
+    func alert(message: String, viewController: UIViewController) {
+        
+        let alertController = UIAlertController(title: "Error", message: "\(message)", preferredStyle: .Alert)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
+            // ...
+        }
+        alertController.addAction(cancelAction)
+        
+        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+            // ...
+        }
+        alertController.addAction(OKAction)
+        
+        viewController.presentViewController(alertController, animated: true) {
+            // ...
+        }
+        
     }
 }
 
