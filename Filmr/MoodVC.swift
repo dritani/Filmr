@@ -93,7 +93,14 @@ class MoodVC: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
         tinderArray = u.moodsToTinder(&u.Moods,emoji: pickedEmoji)
         
         TMDBClient.sharedInstance().testConnection(tinderArray[0], completion: {(complete) in
-            
+            if complete {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.alert("The connection failed.", viewController: self)
+                    self.activityIndicator.stopAnimating()
+                    self.activityIndicator.hidden = true
+                }
+            }
+            //stopspinning
         })
         
         if tinderArray.count > 0 {
@@ -112,15 +119,35 @@ class MoodVC: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
         }
     }
 
-    @IBAction func resetPressed(sender: AnyObject) {
-        for (mood,movies) in u.Moods {
-            for movie in movies {
-                sharedContext.deleteObject(movie)
-                let index = u.Moods?[movie.emoji as String]!.indexOf({$0.title == movie.title})
-                u.Moods?[mood]![index!] = Movie(title: movie.title as String, emoji: movie.emoji as String, context: sharedContext)
-            }
+    func alert(message: String, viewController: UIViewController) {
+        
+        let alertController = UIAlertController(title: "Error", message: "\(message)", preferredStyle: .Alert)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
+            // ...
         }
-        preferencesLabel.hidden = false
+        alertController.addAction(cancelAction)
+        
+        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+            // ...
+        }
+        alertController.addAction(OKAction)
+        
+        viewController.presentViewController(alertController, animated: true) {
+            // ...
+        }
+        
+    }
+    
+    @IBAction func resetPressed(sender: AnyObject) {
+//        for (mood,movies) in u.Moods {
+//            for movie in movies {
+//                sharedContext.deleteObject(movie)
+//                let index = u.Moods?[movie.emoji as String]!.indexOf({$0.title == movie.title})
+//                u.Moods?[mood]![index!] = Movie(title: movie.title as String, emoji: movie.emoji as String, context: sharedContext)
+//            }
+//        }
+//        preferencesLabel.hidden = false
     }
     
     

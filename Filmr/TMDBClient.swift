@@ -34,13 +34,13 @@ class TMDBClient {
             
             /* GUARD: Was there an error? */
             guard (error == nil) else {
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.alert("The connection failed.", viewController: self.viewController)
-                }
+                // move this to moodvc. if error != nil, alert
+                completion(complete: true)
+
                 return
             }
 
-            completion(complete: true)
+            
         }
         
         task.resume()
