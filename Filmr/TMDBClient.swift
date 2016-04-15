@@ -20,6 +20,33 @@ class TMDBClient {
         return Singleton.sharedInstance
     }
     
+    func testConnection(movie: Movie, completion: (complete:Bool)->Void) {
+        let methodParameters = [
+            TMDBConstants.TMDBParameterKeys.ApiKey: TMDBConstants.TMDBParameterValues.ApiKey,
+            TMDBConstants.TMDBParameterKeys.Query: movie.title
+        ]
+        let request = NSMutableURLRequest(URL: tmdbURLFromParameters(methodParameters, withPathExtension: "/search/movie"))
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        let session = NSURLSession.sharedSession()
+    
+        let task = session.dataTaskWithRequest(request) { (data, response, error) in
+            
+            /* GUARD: Was there an error? */
+            guard (error == nil) else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.alert("The connection failed.", viewController: self.viewController)
+                }
+                return
+            }
+
+            completion(complete: true)
+        }
+        
+        task.resume()
+
+    
+    }
     func getMovieInfo(movie: Movie, completion: (complete:Bool)->Void) {
         let methodParameters = [
             TMDBConstants.TMDBParameterKeys.ApiKey: TMDBConstants.TMDBParameterValues.ApiKey,
@@ -35,10 +62,8 @@ class TMDBClient {
             
             /* GUARD: Was there an error? */
             guard (error == nil) else {
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.alert("The connection failed.", viewController: self.viewController)
-                }
                 print("There was an error with your request: \(error)")
+
                 return
             }
             
@@ -70,7 +95,6 @@ class TMDBClient {
                 return
             }
             
-            print(movie.title)
             guard let synopsis = results[0][TMDBConstants.TMDBResponseKeys.Synopsis] as? String else {
                 print("Cannot find the Synopsis")
                 return
@@ -91,11 +115,13 @@ class TMDBClient {
                 return
             }
             
-            
-            movie.synopsis = synopsis
-            movie.posterURL = posterURL
-            movie.backdropURL = backdropURL
-            movie.vote = vote
+            dispatch_async(dispatch_get_main_queue(), {
+                movie.synopsis = synopsis
+                movie.posterURL = posterURL
+                movie.backdropURL = backdropURL
+                movie.vote = vote
+            })
+
             
             completion(complete: true)
         }
@@ -125,9 +151,7 @@ class TMDBClient {
             
             /* GUARD: Was there an error? */
             guard (error == nil) else {
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.alert("The connection failed.", viewController: self.viewController)
-                }
+
                 print("There was an error with your request: \(error)")
                 return
             }
@@ -177,9 +201,7 @@ class TMDBClient {
             
             /* GUARD: Was there an error? */
             guard (error == nil) else {
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.alert("The connection failed.", viewController: self.viewController)
-                }
+
                 print("There was an error with your request: \(error)")
                 return
             }

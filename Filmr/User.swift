@@ -31,6 +31,7 @@ class User {
         }
         
         print(allMovies.count)
+        // If no movies are fetched, create new Movie objects
         if allMovies.count == 0 {
             for (mood,movies) in MoodList.Moods {
                 var movieArray:[Movie] = []
@@ -40,6 +41,7 @@ class User {
                 }
                 Moods[mood] = movieArray
             }
+        // Else, sort the movies into a dictionary
         } else {
             var moods:[String] = []
             for movie in allMovies {

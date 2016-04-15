@@ -92,6 +92,10 @@ class MoodVC: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
         
         tinderArray = u.moodsToTinder(&u.Moods,emoji: pickedEmoji)
         
+        TMDBClient.sharedInstance().testConnection(tinderArray[0], completion: {(complete) in
+            
+        })
+        
         if tinderArray.count > 0 {
             if tinderArray.count > 1 {
                 if tinderArray.count > 2 {
@@ -124,7 +128,8 @@ class MoodVC: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
         TMDBClient.sharedInstance().getMovieInfo((tinderArray[i]), completion: {(complete) in
             TMDBClient.sharedInstance().getMoviePoster((self.tinderArray[i].posterURL)! as String, completion: {(data) in
                 let path = "\(self.pickedEmoji)\((self.tinderArray[i].title!))"
-                
+                print(i)
+                print(path)
                 let documentsDirectoryURL: NSURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
                 let totalPath:String = documentsDirectoryURL.URLByAppendingPathComponent(path as String).path!
                 self.tinderArray[i].posterPath = totalPath

@@ -164,7 +164,6 @@ extension TinderVC: KolodaViewDataSource {
     
     func koloda(koloda: KolodaView, viewForCardAtIndex index: UInt) -> UIView {
         var image2:UIImage!
-        print(tinderArray?[Int(index)].title)
         
 
         
