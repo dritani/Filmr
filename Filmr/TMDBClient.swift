@@ -47,7 +47,7 @@ class TMDBClient {
 
     
     }
-    func getMovieInfo(movie: Movie, completion: (complete:Bool)->Void) {
+    func getMovieInfo(movie: Movie, completion: (complete:Bool,synopsis:String,posterURL:String,backdropURL:String,vote:Double)->Void) {
         let methodParameters = [
             TMDBConstants.TMDBParameterKeys.ApiKey: TMDBConstants.TMDBParameterValues.ApiKey,
             TMDBConstants.TMDBParameterKeys.Query: movie.title
@@ -114,16 +114,10 @@ class TMDBClient {
                 print("Cannot find the Vote")
                 return
             }
-            
-            dispatch_async(dispatch_get_main_queue(), {
-                movie.synopsis = synopsis
-                movie.posterURL = posterURL
-                movie.backdropURL = backdropURL
-                movie.vote = vote
-            })
+     
 
             
-            completion(complete: true)
+            completion(complete: true,synopsis: synopsis,posterURL:posterURL,backdropURL:backdropURL,vote:vote)
         }
         
         task.resume()

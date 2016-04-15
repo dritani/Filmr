@@ -125,11 +125,15 @@ class MoodVC: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     
     
     func downloadPoster(i:Int,next:Bool) {
-        TMDBClient.sharedInstance().getMovieInfo((tinderArray[i]), completion: {(complete) in
+        TMDBClient.sharedInstance().getMovieInfo((tinderArray[i]), completion: {(complete,synopsis,posterURL,backdropURL,vote) in
+            
+            self.tinderArray[i].synopsis = synopsis
+            self.tinderArray[i].posterURL = posterURL
+            self.tinderArray[i].backdropURL = backdropURL
+            self.tinderArray[i].vote = vote
             TMDBClient.sharedInstance().getMoviePoster((self.tinderArray[i].posterURL)! as String, completion: {(data) in
                 let path = "\(self.pickedEmoji)\((self.tinderArray[i].title!))"
-                print(i)
-                print(path)
+
                 let documentsDirectoryURL: NSURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
                 let totalPath:String = documentsDirectoryURL.URLByAppendingPathComponent(path as String).path!
                 self.tinderArray[i].posterPath = totalPath

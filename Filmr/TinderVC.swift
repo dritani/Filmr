@@ -73,10 +73,13 @@ class TinderVC: UIViewController {
     }
     func downloadPoster(i:Int) {
         // Download movie info
-        TMDBClient.sharedInstance().getMovieInfo((tinderArray?[i])!, completion: {(complete) in
+        TMDBClient.sharedInstance().getMovieInfo((tinderArray[i]), completion: {(complete,synopsis,posterURL,backdropURL,vote) in
 //            self.tinderArray[i].synopsis = synopsis
 //            self.tinderArray[i].posterURL = posterURL
-            
+            self.tinderArray[i].synopsis = synopsis
+            self.tinderArray[i].posterURL = posterURL
+            self.tinderArray[i].backdropURL = backdropURL
+            self.tinderArray[i].vote = vote
             // Download movie poster image
             TMDBClient.sharedInstance().getMoviePoster((self.tinderArray?[i].posterURL)! as String, completion: {(data) in
                 

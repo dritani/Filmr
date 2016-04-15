@@ -7,14 +7,11 @@
 //
 
 import UIKit
-import CoreData
+
 class FavoritesVC: UITableViewController {
 
     let u:User = User.sharedInstance as User
     
-    lazy var sharedContext: NSManagedObjectContext = {
-        return CoreDataStackManager.sharedInstance().managedObjectContext
-    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,10 +27,24 @@ class FavoritesVC: UITableViewController {
 
         
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-       return u.moodsToSwiped(&u.Moods).count
-//        print(u.moodsToSwiped(&u.Moods).count)
-       //return 5
-
+        
+        var swipedArray:[Movie] = []
+        
+        // Gets all the movies that have been liked across all moods...
+        for (mood,movies) in u.Moods {
+            for movie in movies {
+                if movie.swiped == 2 {
+                    swipedArray.append(movie)
+                }
+            }
+        }
+        print(swipedArray)
+        // ...and sorts them by date.
+        let sortedArray = swipedArray.sort({ $0.date.compare($1.date) == .OrderedAscending })
+        
+        
+        return sortedArray.count
+//       return u.moodsToSwiped(&u.Moods).count
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -43,7 +54,7 @@ class FavoritesVC: UITableViewController {
         let inset: UIEdgeInsets = UIEdgeInsetsMake(64, 0, 0, 0)
         tableView.contentInset = inset
         tableView.scrollIndicatorInsets = inset
-        
+        print("G")
         var swipedArray:[Movie] = u.moodsToSwiped(&u.Moods)
         
         let movie = swipedArray[indexPath.row]
