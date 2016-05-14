@@ -14,6 +14,7 @@ class User {
     static let sharedInstance = User()
     
     lazy var Moods:[String:[Movie]]! = ["A":[Movie(title: "a", emoji: "A", context: self.sharedContext)]]
+    var tinderArray:[Movie] = []
     var loadedArray:[Movie] = []
     var pickedEmoji:String!
     lazy var sharedContext: NSManagedObjectContext = {
@@ -106,7 +107,7 @@ class User {
                 }
             }
         }
-        
+        print(swipedArray)
         // ...and sorts them by date.
         let sortedArray = swipedArray.sort({ $0.date.compare($1.date) == .OrderedAscending })
 

@@ -4,12 +4,22 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>BubbleTransition.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Koloda.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
 		<key>Pods-Filmr.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>SCLAlertView.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -22,17 +32,27 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>6B922749C6ED6A12E06335D5BF9D2507</key>
+		<key>0507DBB23048A7FCA7AAB3F6F77F11F3</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>82C7B1E45AB78BD1CD8A088698AECF04</key>
+		<key>2692A60CA9509B2E2A543556E170DCB4</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>DE561191A808F901E2F40385BA8C1474</key>
+		<key>7372CA79CE92E7AC032175441663EBE4</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>BD956E74992F39031D933441403DC932</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C45290004E0078130C91A71711094467</key>
 		<dict>
 			<key>primary</key>
 			<true/>

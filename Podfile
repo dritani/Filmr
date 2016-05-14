@@ -4,7 +4,9 @@ platform :ios, '8.0'
 use_frameworks!
 
 target 'Filmr' do
-    pod 'Koloda', '~> 2.0.10'
+    pod 'Koloda', '~> 3.1.1'
+    pod 'BubbleTransition'
+    pod 'SCLAlertView'
 end
 
 

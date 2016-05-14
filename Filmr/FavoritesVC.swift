@@ -22,29 +22,31 @@ class FavoritesVC: UITableViewController {
         
         TMDBClient.sharedInstance().viewController = self
         
+        
         tableView.reloadData()
     }
 
-        
+    
+    // viewdidappear : reloadData
+    
+    
+    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         var swipedArray:[Movie] = []
         
-        // Gets all the movies that have been liked across all moods...
-        for (mood,movies) in u.Moods {
-            for movie in movies {
-                if movie.swiped == 2 {
-                    swipedArray.append(movie)
-                }
-            }
-        }
-        print(swipedArray)
-        // ...and sorts them by date.
-        let sortedArray = swipedArray.sort({ $0.date.compare($1.date) == .OrderedAscending })
-        
-        
-        return sortedArray.count
-//       return u.moodsToSwiped(&u.Moods).count
+//        for (mood,movies) in u.Moods {
+//            for movie in movies {
+//                if movie.swiped == 2 {
+//                    swipedArray.append(movie)
+//                }
+//            }
+//        }
+//        print(swipedArray)
+//        let sortedArray = swipedArray.sort({ $0.date.compare($1.date) == .OrderedAscending })
+//        
+//        return sortedArray.count
+      return u.moodsToSwiped(&u.Moods).count
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {

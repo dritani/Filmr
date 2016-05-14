@@ -1,13 +1,19 @@
 PODS:
-  - Koloda (2.0.10):
+  - BubbleTransition (1.0.3)
+  - Koloda (3.1.1):
     - pop (~> 1.0)
   - pop (1.0.9)
+  - SCLAlertView (0.5.6)
 
 DEPENDENCIES:
-  - Koloda (~> 2.0.10)
+  - BubbleTransition
+  - Koloda (~> 3.1.1)
+  - SCLAlertView
 
 SPEC CHECKSUMS:
-  Koloda: 10f747feeff5e425061f78e5ce17208783e34a99
+  BubbleTransition: a7ae6678721406d60f604cbbea1ace505563119d
+  Koloda: 782e61549cafec9fd69fc70c4a8b54bce997894d
   pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
+  SCLAlertView: c2b916952520d96cf5e886a38053f1b8c3da502e
 
 COCOAPODS: 0.39.0

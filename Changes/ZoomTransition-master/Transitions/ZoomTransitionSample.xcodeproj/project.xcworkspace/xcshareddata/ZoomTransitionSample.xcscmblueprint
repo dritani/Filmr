@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "9B5193D9127EF6DA4EE5B4162B0CEFBF0DA1DD61",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "BEEC795CE130BEB46EB21A58ABC678A915951772" : 0,
+    "9B5193D9127EF6DA4EE5B4162B0CEFBF0DA1DD61" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "44BC3742-8B22-496E-B577-BC21BAB5AB45",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "BEEC795CE130BEB46EB21A58ABC678A915951772" : "..\/..",
+    "9B5193D9127EF6DA4EE5B4162B0CEFBF0DA1DD61" : "Filmr\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "ZoomTransitionSample",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Changes\/ZoomTransition-master\/Transitions\/ZoomTransitionSample.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/dritani\/Filmr.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "9B5193D9127EF6DA4EE5B4162B0CEFBF0DA1DD61"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/LithiumLover\/CodeEval.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "BEEC795CE130BEB46EB21A58ABC678A915951772"
+    }
+  ]
+}
