@@ -9,8 +9,8 @@
 import UIKit
 import Koloda
 
-private let overlayRightImageName = "overlay_like"
-private let overlayLeftImageName = "overlay_skip"
+private let overlayRightImageName = "yesOverlayImage" //"overlay_like"
+private let overlayLeftImageName = "noOverlayImage" //"overlay_skip"
 
 class CustomOverlayView: OverlayView {
 

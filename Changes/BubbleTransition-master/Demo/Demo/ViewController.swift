@@ -19,6 +19,7 @@ class ViewController: UIViewController, UIViewControllerTransitioningDelegate {
         let controller = segue.destinationViewController
         controller.transitioningDelegate = self
         controller.modalPresentationStyle = .Custom
+        
     }
 
     // MARK: UIViewControllerTransitioningDelegate

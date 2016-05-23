@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "9B5193D9127EF6DA4EE5B4162B0CEFBF0DA1DD61",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "BEEC795CE130BEB46EB21A58ABC678A915951772" : 0,
+    "9B5193D9127EF6DA4EE5B4162B0CEFBF0DA1DD61" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "D189A970-DA70-4A80-B947-7F4361D83B3A",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "BEEC795CE130BEB46EB21A58ABC678A915951772" : "..\/..",
+    "9B5193D9127EF6DA4EE5B4162B0CEFBF0DA1DD61" : "Filmr\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "DemoApp",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Changes\/PopInAndOutCollectionViewTransition-master\/DemoApp\/DemoApp.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/dritani\/Filmr.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "9B5193D9127EF6DA4EE5B4162B0CEFBF0DA1DD61"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/LithiumLover\/CodeEval.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "BEEC795CE130BEB46EB21A58ABC678A915951772"
+    }
+  ]
+}

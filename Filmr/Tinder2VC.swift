@@ -9,6 +9,7 @@
 import UIKit
 import Koloda
 import pop
+import SCLAlertView
 
 private let numberOfCards: UInt = 5
 private let frameAnimationSpringBounciness: CGFloat = 9
@@ -40,7 +41,6 @@ class Tinder2VC: UIViewController {
         UIApplication.sharedApplication().statusBarStyle = .Default
     }
     
-    
     //MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,7 +53,6 @@ class Tinder2VC: UIViewController {
         self.modalTransitionStyle = UIModalTransitionStyle.FlipHorizontal
         
         let u = User.sharedInstance as User
-        TMDBClient.sharedInstance().viewController = self
         
         activityIndicator.hidden = true
         noMoreLabel.hidden = true
@@ -73,83 +72,39 @@ class Tinder2VC: UIViewController {
     @IBAction func undoButtonTapped() {
         kolodaView?.revertAction()
     }
-    
-    func downloadBackdrop(i:Int) {
-        TMDBClient.sharedInstance().getMovieBackdrop((self.u.loadedArray[i].backdropURL)! as String, completion: {(data) in
-            let path = "\(self.pickedEmoji)B\((self.u.loadedArray[i].title!))"
+
+    func downloadPoster(i:Int) {
+            
+        TMDBClient.sharedInstance.getMoviePoster((self.u.tinderArray[i].posterURL)! as String, completion: {(data,error) in
+            
+            if error {
+                SCLAlertView().showError("Connection Error", subTitle: "Please check your internet connection and try again.", closeButtonTitle:"OK")
+                return
+            }
+            
+            let path = "\(self.pickedEmoji)\((self.u.tinderArray[i].title!))"
             let documentsDirectoryURL: NSURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
             let totalPath:String = documentsDirectoryURL.URLByAppendingPathComponent(path as String).path!
-            self.u.tinderArray[i].backdropPath = totalPath
+            self.u.tinderArray[i].posterPath = totalPath
             
             let image = UIImage(data: data)
             let result = UIImageJPEGRepresentation(image!, 0.0)!
             result.writeToFile(totalPath as String, atomically: true)
+            
             CoreDataStackManager.sharedInstance().saveContext()
+            //self.u.loadedArray.append(self.u.tinderArray[i])
+            
             dispatch_async(dispatch_get_main_queue(), {
-                self.performSegueWithIdentifier("toDetail", sender: self.u.loadedArray[i])
-            })
-        })
-    }
-    
-    func downloadPoster(i:Int) {
-        TMDBClient.sharedInstance().getMovieInfo((self.u.tinderArray[i]), completion: {(complete,synopsis,posterURL,backdropURL,vote) in
-            
-            if complete == false {
-                self.alert("The connection failed.", viewController: self)
-            }
-            
-            self.u.tinderArray[i].synopsis = synopsis
-            self.u.tinderArray[i].posterURL = posterURL
-            self.u.tinderArray[i].backdropURL = backdropURL
-            self.u.tinderArray[i].vote = vote
-            
-            TMDBClient.sharedInstance().getMoviePoster((self.u.tinderArray[i].posterURL)! as String, completion: {(data) in
-                
-                let path = "\(self.pickedEmoji)\((self.u.tinderArray[i].title!))"
-                let documentsDirectoryURL: NSURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
-                let totalPath:String = documentsDirectoryURL.URLByAppendingPathComponent(path as String).path!
-                self.u.tinderArray[i].posterPath = totalPath
-                
-                let image = UIImage(data: data)
-                let result = UIImageJPEGRepresentation(image!, 0.0)!
-                result.writeToFile(totalPath as String, atomically: true)
-                CoreDataStackManager.sharedInstance().saveContext()
-                
-                self.u.loadedArray.append(self.u.tinderArray[i])
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.kolodaView?.reloadData()
-                })
+                self.kolodaView?.reloadCardsInIndexRange(i...i)
             })
         })
     }
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        let detailVC = segue.destinationViewController as! DetailVC
-        let data = sender as! Movie
-        detailVC.movie = data
+
         CoreDataStackManager.sharedInstance().saveContext()
         activityIndicator.stopAnimating()
         activityIndicator.hidden = true
-    }
-    
-    func alert(message: String, viewController: UIViewController) {
-        
-        let alertController = UIAlertController(title: "Error", message: "\(message)", preferredStyle: .Alert)
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
-            // ...
-        }
-        alertController.addAction(cancelAction)
-        
-        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-            // ...
-        }
-        alertController.addAction(OKAction)
-        
-        viewController.presentViewController(alertController, animated: true) {
-            // ...
-        }
-        
     }
 
 }
@@ -158,14 +113,13 @@ class Tinder2VC: UIViewController {
 extension Tinder2VC: KolodaViewDelegate {
     
     func kolodaDidRunOutOfCards(koloda: KolodaView) {
-        kolodaView.resetCurrentCardIndex()
+        //kolodaView.resetCurrentCardIndex()
         noMoreLabel.hidden = false
     }
     
     func koloda(koloda: KolodaView, didSelectCardAtIndex index: UInt) {
         activityIndicator.hidden = false
         activityIndicator.startAnimating()
-        downloadBackdrop(Int(index))
     }
     
     func kolodaShouldApplyAppearAnimation(koloda: KolodaView) -> Bool {
@@ -188,17 +142,21 @@ extension Tinder2VC: KolodaViewDelegate {
     }
     
     func koloda(koloda: KolodaView, didSwipeCardAtIndex index: UInt, inDirection direction: SwipeResultDirection) {
+        
         if direction == .Left {
-            self.u.loadedArray[Int(index)].swiped = 1
+            self.u.tinderArray[Int(index)].swiped = 1
         } else if direction == .Right {
-            self.u.loadedArray[Int(index)].swiped = 2
+            self.u.tinderArray[Int(index)].swiped = 2
         }
         
         CoreDataStackManager.sharedInstance().saveContext()
-        self.u.loadedArray[Int(index)].date = NSDate()
+        self.u.tinderArray[Int(index)].date = NSDate()
         
         if Int(index)+2 <= self.u.tinderArray.count - 1 {
-            downloadPoster(Int(index)+2)
+//            self.u.loadedArray.append(self.u.tinderArray[Int(index)+2])
+//            kolodaView.reloadData()
+            
+            //downloadPoster(Int(index)+2)
         }
     }
 }
@@ -207,34 +165,30 @@ extension Tinder2VC: KolodaViewDelegate {
 extension Tinder2VC: KolodaViewDataSource {
     
     func kolodaNumberOfCards(koloda: KolodaView) -> UInt {
-        return UInt(self.u.loadedArray.count)
+        return UInt(self.u.tinderArray.count)
     }
     
     func koloda(koloda: KolodaView, viewForCardAtIndex index: UInt) -> UIView {
-        var image2:UIImage!
         
-        if NSFileManager.defaultManager().fileExistsAtPath(self.u.loadedArray[Int(index)].posterPath as! String) {
-            let data = NSData(contentsOfFile: (self.u.loadedArray[Int(index)].posterPath)! as String)
+        // print(self.u.tinderArray)
+        var placeholder = UIImageView(image: UIImage(named: "cards_1"))
+        
+        if let _ = self.u.tinderArray[Int(index)].posterPath {
+            let data = NSData(contentsOfFile: (self.u.tinderArray[Int(index)].posterPath)! as String)
             let image = UIImage(data: data!)
-            return UIImageView(image: image)
+            let imageView = UIImageView(image: image)
+            imageView.layer.cornerRadius = 10
+            imageView.layer.masksToBounds = true
+            return imageView
+        
         } else {
-            TMDBClient.sharedInstance().getMoviePoster((self.u.loadedArray[Int(index)].posterURL)! as String, completion: {(data) in
-                
-                let path = "\(self.u.loadedArray[Int(index)].emoji)\((self.u.loadedArray[Int(index)].title!))"
-                let documentsDirectoryURL: NSURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
-                let totalPath:String = documentsDirectoryURL.URLByAppendingPathComponent(path as String).path!
-                
-                self.u.loadedArray[Int(index)].posterPath = totalPath
-                
-                let image = UIImage(data: data)
-                let result = UIImageJPEGRepresentation(image!, 0.0)!
-                result.writeToFile(totalPath as String, atomically: true)
-                dispatch_async(dispatch_get_main_queue(), {
-                    image2 = image
-                })
-            })
+            
+            downloadPoster(Int(index))
+            
         }
-        return UIImageView(image: image2)
+
+        return placeholder
+        
     }
     
     func koloda(koloda: KolodaView, viewForCardOverlayAtIndex index: UInt) -> OverlayView? {

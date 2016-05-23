@@ -85,12 +85,14 @@ strip_invalid_archs() {
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-Filmr/BubbleTransition.framework"
+  install_framework "Pods-Filmr/Firebase.framework"
   install_framework "Pods-Filmr/Koloda.framework"
   install_framework "Pods-Filmr/SCLAlertView.framework"
   install_framework "Pods-Filmr/pop.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-Filmr/BubbleTransition.framework"
+  install_framework "Pods-Filmr/Firebase.framework"
   install_framework "Pods-Filmr/Koloda.framework"
   install_framework "Pods-Filmr/SCLAlertView.framework"
   install_framework "Pods-Filmr/pop.framework"

@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '8263830E874862BB6E1C7265'
+               BlueprintIdentifier = 'DEFE3D1D9A8CE283E7B9A2CC'
                BlueprintName = 'Pods-Filmr'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'Pods_Filmr.framework'>

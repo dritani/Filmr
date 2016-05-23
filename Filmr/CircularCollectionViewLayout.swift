@@ -96,7 +96,7 @@ class CircularCollectionViewLayout: UICollectionViewLayout {
   }
   
   override func layoutAttributesForItemAtIndexPath(indexPath: NSIndexPath)
-    -> UICollectionViewLayoutAttributes! {
+    -> UICollectionViewLayoutAttributes? {
       return attributesList[indexPath.row]
   }
   

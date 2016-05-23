@@ -9,7 +9,7 @@
 import Foundation
 
 struct MoodList {
-    
+    //"😍⭐🚗😱💩🚬🎄"
     static let Moods:[String:[String]]! = [
         "😀": [
             "Airplane!",
@@ -33,7 +33,7 @@ struct MoodList {
             "Ratatouille",
             "The Truman Show",
             "Juno"
-        ],
+        ]/*,
         
         "⭐": [
             "The Shawshank Redemption",
@@ -258,7 +258,7 @@ struct MoodList {
 //            "Fight Club",
 //            "Nowhere",
 //            "In Bruges"
-//        ],
+//        ], */
     ]
-    
+ 
 }

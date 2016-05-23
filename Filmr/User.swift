@@ -14,6 +14,8 @@ class User {
     static let sharedInstance = User()
     
     lazy var Moods:[String:[Movie]]! = ["A":[Movie(title: "a", emoji: "A", context: self.sharedContext)]]
+    lazy var moodList:[String:[String:String]]! = ["A":["a":"b"]]
+    
     var tinderArray:[Movie] = []
     var loadedArray:[Movie] = []
     var pickedEmoji:String!
@@ -23,25 +25,26 @@ class User {
     
     init() {
         var allMovies:[Movie] = []
+        
         let fetchRequest = NSFetchRequest(entityName: "Movie")
         
         do {
             allMovies = try sharedContext.executeFetchRequest(fetchRequest) as! [Movie]
         } catch _ {
-
+            //
         }
         
         print(allMovies.count)
         // If no movies are fetched, create new Movie objects
         if allMovies.count == 0 {
-            for (mood,movies) in MoodList.Moods {
-                var movieArray:[Movie] = []
-                for movie in movies {
-                    let newMovie = Movie(title: movie, emoji: mood, context: self.sharedContext)
-                    movieArray.append(newMovie)
-                }
-                Moods[mood] = movieArray
-            }
+//            for (mood,movies) in MoodList.Moods {
+//                var movieArray:[Movie] = []
+//                for movie in movies {
+//                    let newMovie = Movie(title: movie, emoji: mood, context: self.sharedContext)
+//                    movieArray.append(newMovie)
+//                }
+//                Moods[mood] = movieArray
+//            }
         // Else, sort the movies into a dictionary
         } else {
             var moods:[String] = []
@@ -88,14 +91,6 @@ class User {
         return tinderArray
     }
     
-    func tinderToLoaded(inout tinderArray:[Movie])->[Movie] {
-        var loadedArray:[Movie] = []
-        for i in 0...2 {
-            loadedArray.append(tinderArray[i])
-        }
-        return loadedArray
-    }
-    
     func moodsToSwiped(inout Moods:[String:[Movie]]!)->[Movie] {
         var swipedArray:[Movie] = []
         
@@ -107,13 +102,11 @@ class User {
                 }
             }
         }
-        print(swipedArray)
+
         // ...and sorts them by date.
         let sortedArray = swipedArray.sort({ $0.date.compare($1.date) == .OrderedAscending })
 
-        
         return sortedArray
-        
         
     }
     

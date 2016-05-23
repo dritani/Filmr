@@ -7,6 +7,7 @@ target 'Filmr' do
     pod 'Koloda', '~> 3.1.1'
     pod 'BubbleTransition'
     pod 'SCLAlertView'
+    pod 'Firebase'
 end
 
 

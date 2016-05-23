@@ -36,32 +36,6 @@
             </objects>
             <point key="canvasLocation" x="1189" y="449"/>
         </scene>
-        <!--Detail2VC-->
-        <scene sceneID="vVu-EM-kkH">
-            <objects>
-                <viewController storyboardIdentifier="Detail2VC" title="Detail2VC" id="68R-OG-ejp" customClass="Detail2VC" customModule="CircularCollectionView" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="fgr-gm-Mtt"/>
-                        <viewControllerLayoutGuide type="bottom" id="RLT-nP-rMs"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="ytE-gr-Tiz">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YK9-5J-5LM">
-                                <rect key="frame" x="20" y="74" width="560" height="275"/>
-                            </imageView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <connections>
-                        <outlet property="imageView" destination="YK9-5J-5LM" id="iBc-Of-Qwu"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="4id-4u-Cej" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1882" y="430"/>
-        </scene>
         <!--Navigation Controller-->
         <scene sceneID="SuH-LE-EBz">
             <objects>

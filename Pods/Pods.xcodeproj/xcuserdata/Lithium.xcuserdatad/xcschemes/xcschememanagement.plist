@@ -9,6 +9,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Firebase.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Koloda.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -32,12 +37,12 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>0507DBB23048A7FCA7AAB3F6F77F11F3</key>
+		<key>2692A60CA9509B2E2A543556E170DCB4</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>2692A60CA9509B2E2A543556E170DCB4</key>
+		<key>331E96E44D07872914845A04E1F51C63</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -47,7 +52,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>BD956E74992F39031D933441403DC932</key>
+		<key>B7AC9326D819482593FE118E915409D7</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>B9868134FC5E9EE249422AB9293AE901</key>
 		<dict>
 			<key>primary</key>
 			<true/>

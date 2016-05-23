@@ -1,5 +1,6 @@
 PODS:
   - BubbleTransition (1.0.3)
+  - Firebase (2.5.1)
   - Koloda (3.1.1):
     - pop (~> 1.0)
   - pop (1.0.9)
@@ -7,11 +8,13 @@ PODS:
 
 DEPENDENCIES:
   - BubbleTransition
+  - Firebase
   - Koloda (~> 3.1.1)
   - SCLAlertView
 
 SPEC CHECKSUMS:
   BubbleTransition: a7ae6678721406d60f604cbbea1ace505563119d
+  Firebase: 3565ea88b830f28f2c77ecc524622bc71a20d085
   Koloda: 782e61549cafec9fd69fc70c4a8b54bce997894d
   pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
   SCLAlertView: c2b916952520d96cf5e886a38053f1b8c3da502e
