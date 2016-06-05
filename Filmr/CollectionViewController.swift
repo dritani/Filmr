@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SCLAlertView
 
 let reuseIdentifier = "Cell"
 
@@ -25,6 +26,7 @@ class CollectionViewController: UICollectionViewController  {
         let imageView = UIImageView(image: UIImage(named: "bg2.jpg"))
         imageView.contentMode = UIViewContentMode.ScaleAspectFill
         collectionView!.backgroundView = imageView
+        self.navigationController?.delegate = self
     }
   
     
@@ -50,22 +52,54 @@ class CollectionViewController: UICollectionViewController  {
                                cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
     let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! CircularCollectionViewCell
     
-//    cell.imageName = images[indexPath.row]
-//    return cell
-    if empty {
-        cell.imageView!.image = UIImage(named: "cards_2" )
-    } else {
-        var swipedArray:[Movie] = u.moodsToSwiped(&u.Moods)
-        let movie = swipedArray[indexPath.row]
-        
+    let placeholder = UIImage(named: "cards_1")
+    cell.imageView!.image = placeholder
+    
+    var swipedArray:[Movie] = u.moodsToSwiped(&u.Moods)
+    let movie = swipedArray[indexPath.item]
+    
+    if let _ = movie.posterPath {
         let data = NSData(contentsOfFile: (movie.posterPath)! as String)
         let image = UIImage(data: data!)
         cell.imageView!.image = image
+        return cell
+    } else {
+        downloadPoster(indexPath.item)
     }
     
     return cell
 
   }
+    
+    func downloadPoster(i:Int) {
+        
+        var swipedArray:[Movie] = u.moodsToSwiped(&u.Moods)
+        let movie = swipedArray[i]
+        
+        TMDBClient.sharedInstance.getMoviePoster((movie.posterURL)! as String, completion: {(data,error) in
+            
+            if error {
+                SCLAlertView().showError("Connection Error", subTitle: "Please check your internet connection and try again.", closeButtonTitle:"OK")
+                return
+            }
+            
+            let path = "\(movie.emoji)\((movie.title!))"
+            let documentsDirectoryURL: NSURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
+            let totalPath:String = documentsDirectoryURL.URLByAppendingPathComponent(path as String).path!
+            self.u.tinderArray[i].posterPath = totalPath
+            
+            let image = UIImage(data: data)
+            let result = UIImageJPEGRepresentation(image!, 0.0)!
+            result.writeToFile(totalPath as String, atomically: true)
+            
+            CoreDataStackManager.sharedInstance().saveContext()
+            //self.u.loadedArray.append(self.u.tinderArray[i])
+            
+            dispatch_async(dispatch_get_main_queue(), {
+                self.collectionView?.reloadItemsAtIndexPaths([NSIndexPath(index: i)])
+            })
+        })
+    }
     
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let cell = collectionView.cellForItemAtIndexPath(indexPath)

@@ -358,9 +358,6 @@
                                                 <integer key="value" value="30"/>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
-                                        <variation key="widthClass=compact" misplaced="YES">
-                                            <rect key="frame" x="168" y="409" width="64" height="62"/>
-                                        </variation>
                                         <connections>
                                             <action selector="closeAction:" destination="oSf-PC-EoI" eventType="touchUpInside" id="sXn-TZ-6Sx"/>
                                         </connections>
@@ -468,7 +465,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eoe-na-6lx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3306" y="1169"/>
+            <point key="canvasLocation" x="3544.5" y="906"/>
         </scene>
         <!--Detail2VC-->
         <scene sceneID="ieR-e2-erD">
@@ -511,13 +508,14 @@
                             </mask>
                         </variation>
                     </view>
+                    <navigationItem key="navigationItem" id="Kg1-1B-nnm"/>
                     <connections>
                         <outlet property="imageView" destination="BcS-qv-Oh6" id="Y1Q-Sc-fae"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tWj-pi-4bp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4261.5" y="1169"/>
+            <point key="canvasLocation" x="4215" y="553"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="QjM-6x-54g">

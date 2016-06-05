@@ -1,3 +1,8 @@
 Firebase/CloudKit for backend
 
 Custom keyboard to select emojis? Or animated collectionView
+
+RMPZoomTranisitionAnimator
+ZoomTransition
+ZoomInteractiveTransition
+PopInAndOutCollectionViewTransition

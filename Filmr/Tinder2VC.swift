@@ -149,9 +149,8 @@ extension Tinder2VC: KolodaViewDelegate {
             self.u.tinderArray[Int(index)].swiped = 2
         }
         
-        CoreDataStackManager.sharedInstance().saveContext()
         self.u.tinderArray[Int(index)].date = NSDate()
-        
+        CoreDataStackManager.sharedInstance().saveContext()
         if Int(index)+2 <= self.u.tinderArray.count - 1 {
 //            self.u.loadedArray.append(self.u.tinderArray[Int(index)+2])
 //            kolodaView.reloadData()

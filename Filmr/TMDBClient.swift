@@ -57,7 +57,6 @@ class TMDBClient {
             // No need, the data is already raw image data.
             
             /* 6. Use the data! */
-            print("complete")
             completion(data:data,error:false)
         }
         

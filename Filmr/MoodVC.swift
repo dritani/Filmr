@@ -78,8 +78,6 @@ class MoodVC: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UI
                 let movies = moodList[mood] as! [String:AnyObject]
                 
                 for movie in movies.keys {
-                    print(movie)
-                    
                     if self.u.moodList[mood]?[movie] == nil {
                     
                         let info = movies[movie] as! [String:AnyObject]
@@ -91,10 +89,14 @@ class MoodVC: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UI
                         
                         self.u.moodList[mood]?[movie] = "a"
                         self.u.Moods[mood]!.append(newMovie)
+                        
                     }
                 }
             }
             
+
+            
+            CoreDataStackManager.sharedInstance().saveContext()
         }, withCancelBlock: { error in
                 print(error.description)
                 // alert: check  your internet connection
@@ -118,24 +120,6 @@ class MoodVC: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UI
         
         
         
-        
-        
-//        ref.observeEventType(.Value, withBlock: { snapshot in
-//            let movies = snapshot.value as! [String:AnyObject]
-//            for movie in movies.keys {
-//                let movieInfo = movies[movie]! as! [String:AnyObject]
-//                print(movieInfo["added"]!)
-//                if movieInfo["added"] as! Int == 0 {
-//                    let ref2 = Firebase(url:"https://filmr.firebaseio.com/a/😀/"+"\(movie)/")
-//                    ref2.updateChildValues(["added":1])
-//                }
-//            }
-//            // if snapshot.added == false
-//                // create core data Movie()
-//            }, withCancelBlock: { error in
-//            print(error.description)
-//            // alert: check  your internet connection
-//        })
         
         
         

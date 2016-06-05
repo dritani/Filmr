@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6E0D82781CE7FE27003081A8 /* Images in Resources */ = {isa = PBXBuildFile; fileRef = 6E0D82771CE7FE27003081A8 /* Images */; };
 		6E217EDD1CE2B21D001A8BF6 /* Tinder2VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E217ED81CE2B21D001A8BF6 /* Tinder2VC.swift */; };
 		6E217EDE1CE2B21E001A8BF6 /* BackgroundKolodaAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E217ED91CE2B21D001A8BF6 /* BackgroundKolodaAnimator.swift */; };
 		6E217EDF1CE2B21E001A8BF6 /* CustomKolodaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E217EDA1CE2B21D001A8BF6 /* CustomKolodaView.swift */; };
@@ -40,7 +39,6 @@
 /* Begin PBXFileReference section */
 		0054AADE501B7A9BC51B120F /* Pods_Filmr.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Filmr.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		309D8C6C7B005C0EF0C5CEB3 /* Pods-Filmr.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Filmr.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Filmr/Pods-Filmr.debug.xcconfig"; sourceTree = "<group>"; };
-		6E0D82771CE7FE27003081A8 /* Images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Images; sourceTree = "<group>"; };
 		6E217ED81CE2B21D001A8BF6 /* Tinder2VC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tinder2VC.swift; sourceTree = "<group>"; };
 		6E217ED91CE2B21D001A8BF6 /* BackgroundKolodaAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundKolodaAnimator.swift; sourceTree = "<group>"; };
 		6E217EDA1CE2B21D001A8BF6 /* CustomKolodaView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomKolodaView.swift; sourceTree = "<group>"; };
@@ -112,6 +110,17 @@
 			name = Connection;
 			sourceTree = "<group>";
 		};
+		6E43800E1CF4BCE1008F960D /* Zoom Transition */ = {
+			isa = PBXGroup;
+			children = (
+				6E4855741CF281BD008474A8 /* CollectionPushAndPoppable.swift */,
+				6E4855751CF281BD008474A8 /* PopInAndOutAnimator.swift */,
+				6E4855761CF281BD008474A8 /* PopInAndOutCollectionViewTransition.h */,
+				6E4855771CF281BD008474A8 /* UIView+Screenshot.swift */,
+			);
+			name = "Zoom Transition";
+			sourceTree = "<group>";
+		};
 		6E48557B1CF29548008474A8 /* Koloda */ = {
 			isa = PBXGroup;
 			children = (
@@ -166,14 +175,10 @@
 			children = (
 				6E742C8F1CAF0D9A00DC3B5B /* MoodVC.swift */,
 				6E217ED81CE2B21D001A8BF6 /* Tinder2VC.swift */,
-				6ECE2C141CE8DD5100BA11A7 /* Detail2VC.swift */,
 				6EF005F51CE7F6D900B56BE6 /* CollectionViewController.swift */,
 				6EF005F21CE7F6D900B56BE6 /* CircularCollectionViewCell.swift */,
-				6ECE2C1D1CE8DF2F00BA11A7 /* Filmr-Bridging-Header.h */,
-				6E4855741CF281BD008474A8 /* CollectionPushAndPoppable.swift */,
-				6E4855751CF281BD008474A8 /* PopInAndOutAnimator.swift */,
-				6E4855761CF281BD008474A8 /* PopInAndOutCollectionViewTransition.h */,
-				6E4855771CF281BD008474A8 /* UIView+Screenshot.swift */,
+				6ECE2C141CE8DD5100BA11A7 /* Detail2VC.swift */,
+				6E43800E1CF4BCE1008F960D /* Zoom Transition */,
 				6E2293621CBAE34C00E1AF67 /* Connection */,
 			);
 			name = Controller;
@@ -193,11 +198,11 @@
 			isa = PBXGroup;
 			children = (
 				6E742C941CAF0D9A00DC3B5B /* Assets.xcassets */,
-				6E0D82771CE7FE27003081A8 /* Images */,
 				6E30F5211CE7B0BE009DA167 /* bg2.jpg */,
 				6E742C961CAF0D9A00DC3B5B /* LaunchScreen.storyboard */,
 				6E742C8D1CAF0D9A00DC3B5B /* AppDelegate.swift */,
 				6E742C991CAF0D9A00DC3B5B /* Info.plist */,
+				6ECE2C1D1CE8DF2F00BA11A7 /* Filmr-Bridging-Header.h */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -290,7 +295,6 @@
 				6E742C951CAF0D9A00DC3B5B /* Assets.xcassets in Resources */,
 				6E742C931CAF0D9A00DC3B5B /* Main.storyboard in Resources */,
 				6EF005F81CE7F6D900B56BE6 /* CircularCollectionViewCell.xib in Resources */,
-				6E0D82781CE7FE27003081A8 /* Images in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
